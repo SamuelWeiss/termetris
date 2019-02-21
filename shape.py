@@ -13,12 +13,12 @@ all_shapes = [LINE, TEE, BLOCK, LEFT_S, RIGHT_S, LEFT_L, RIGHT_L]
 
 class shape:
 
-	def __init__(self):
+	def __init__(self, shape):
 		# choose randomly among shapes
 		self.x = 5
 		self.y = 1
 		self.rotation = 0
-		self.shape = random.choice(all_shapes)
+		self.shape = shape
 
 	def __str__(self):
 		res =  "I am a " + self.shape + ", my rotation is " + str(self.rotation) + " with position (" + str(self.x) + ", " + str(self.y)+ ", my coordinates are " + str(self.get_blocks())
@@ -35,11 +35,11 @@ class shape:
 				return [(x - 1, y), (x, y), (x + 1, y), (x + 2, y)]
 		elif self.shape == TEE:
 			if self.rotation == 0:
-				return [(x - 1, y), (x, y), (x + 1, y), (x, y + 1)]
+				return [(x - 1, y), (x, y), (x + 1, y), (x, y - 1)]
 			elif self.rotation == 1:
 				return [(x, y - 1), (x, y), (x, y + 1), (x + 1, y)]
 			elif self.rotation == 2:
-				return [(x - 1, y), (x, y), (x + 1, y), (x, y - 1)]
+				return [(x - 1, y), (x, y), (x + 1, y), (x, y + 1)]
 			else:
 				return [(x, y - 1), (x, y), (x, y + 1), (x - 1, y)]
 		elif self.shape == BLOCK:
@@ -110,6 +110,45 @@ class shape:
 			return "\n ##\n##\n\n"
 		else:
 			return ""
+
+	def get_pretty_shape_array(self):
+		ret = []
+		if self.shape == LINE:
+			ret.append(" #  ")
+			ret.append(" #  ")
+			ret.append(" #  ")
+			ret.append(" #  ")
+		elif self.shape == BLOCK:
+			ret.append("    ")
+			ret.append(" ## ")
+			ret.append(" ## ")
+			ret.append("    ")
+		elif self.shape == TEE:
+			ret.append("    ")
+			ret.append(" #  ")
+			ret.append("### ")
+			ret.append("    ")
+		elif self.shape == LEFT_L:
+			ret.append("  # ")
+			ret.append("  # ")
+			ret.append(" ## ")
+			ret.append("    ")
+		elif self.shape == RIGHT_L:
+			ret.append(" #  ")
+			ret.append(" #  ")
+			ret.append(" ## ")
+			ret.append("    ")
+		elif self.shape == LEFT_S:
+			ret.append("    ")
+			ret.append("##  ")
+			ret.append(" ## ")
+			ret.append("    ")
+		elif self.shape == RIGHT_S:
+			ret.append("    ")
+			ret.append(" ## ")
+			ret.append("##  ")
+			ret.append("    ")
+		return ret
 
 	def reset_position(self):
 		self.x = 5

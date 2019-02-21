@@ -12,13 +12,13 @@ SWAP = 'swap'
 NO_INPUT = 'no_input'
 KILL_ME = 'kill_me'
 
-def get_raw_unblocking_keyboard_input():
+def get_raw_unblocking_keyboard_input(wait_time):
 	import sys, tty, termios
 	fd = sys.stdin.fileno()
 	old_settings = termios.tcgetattr(fd)
 	tty.setraw(sys.stdin.fileno())
 
-	i,o,e = select.select([sys.stdin],[],[],1)
+	i,o,e = select.select([sys.stdin],[],[],wait_time)
 	for s in i:
 		if s == sys.stdin:
 			input = sys.stdin.read(1)
@@ -27,9 +27,8 @@ def get_raw_unblocking_keyboard_input():
 	termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 	return False
 
-
-def get_next_action():
-	key = get_raw_unblocking_keyboard_input()
+def get_next_action(wait_time):
+	key = get_raw_unblocking_keyboard_input(wait_time)
 	if key == 'w':
 		return DROP_SHAPE
 	if key == 'd':

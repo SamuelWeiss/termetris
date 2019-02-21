@@ -1,5 +1,4 @@
 import shape
-
 class tetris_board:
 
 	width = 10
@@ -14,11 +13,6 @@ class tetris_board:
 
 	def render_board(self, shape):
 		self.look_for_complete_rows()
-		# for row in self.blocks:
-		# 	for block in row:
-		# 		print block,
-		# 		print " ",
-		# 	print "\n",
 
 		rendered_board = []
 		# first render the blocks that are already in the board
@@ -48,12 +42,12 @@ class tetris_board:
 			if y >= 0 and x >= 0:
 				rendered_board[y][x] = "#"
 
-
-		print "+" + ("-" * self.width) + "+"
+		ret_board = []
+		ret_board.append("+" + ("-" * self.width) + "+")
 		for row in rendered_board:
-			print "|" + "".join(row)+ "|"
-		print "+" + ("-" * self.width) + "+"
-
+			ret_board.append("|" + "".join(row)+ "|")
+		ret_board.append("+" + ("-" * self.width) + "+")
+		return ret_board
 
 	def has_intersection(self, shape):
 		shape_blocks = shape.get_blocks()
@@ -89,26 +83,27 @@ class tetris_board:
 		while self.has_intersection(shape) == False:
 			shape.translate_y(1)
 			fallen += 1
-		# move back up one
 		shape.translate_y(-1)
 		blocks = shape.get_blocks()
 		shape.translate_y(-1 * (fallen - 1))
 		return blocks
 
 
-	def fall_shape(self, shape):
+	def fall_shape(self, shape, piece_moved):
 		shape.translate_y(1)
-		if self.has_intersection(shape):
+		intersection = self.has_intersection(shape)
+		if intersection and not piece_moved:
 			shape.translate_y(-1)
-			print "putting shape in board after finding an intersection "
 			self.put_shape_in_board(shape)
 			return None
+		elif intersection and piece_moved:
+			shape.translate_y(-1)
 		return shape
 
 
 	def drop_shape(self, shape):
 		while shape is not None:
-			shape = self.fall_shape(shape)
+			shape = self.fall_shape(shape, False)
 		return None
 
 	def fix_intersections(self, shape):
